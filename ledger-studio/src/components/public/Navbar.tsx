@@ -19,14 +19,17 @@ export default function PublicNavbar() {
 
                 {/* Links */}
                 <div className="hidden md:flex items-center gap-8">
-                    <Link href="#services" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
+                    <Link href="/services" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
                         Services
                     </Link>
-                    <Link href="#method" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
-                        Methodology
+                    <Link href="/about" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
+                        About
                     </Link>
-                    <Link href="#pricing" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
-                        Pricing
+                    <Link href="/videos" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
+                        Videos
+                    </Link>
+                    <Link href="/blog" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
+                        Blog
                     </Link>
                 </div>
 
