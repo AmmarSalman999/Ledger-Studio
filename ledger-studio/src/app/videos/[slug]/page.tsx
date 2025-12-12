@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: VideoPageProps) {
 
     return {
         title: `${video.title} | Ledger Studio`,
-        description: video.description,
+        description: video.desc,
     };
 }
 
@@ -32,9 +32,9 @@ export default async function VideoPage({ params }: VideoPageProps) {
         "@context": "https://schema.org",
         "@type": "VideoObject",
         "name": video.title,
-        "description": video.description,
+        "description": video.desc,
         "thumbnailUrl": `https://img.youtube.com/vi/${video.youtubeId}/maxresdefault.jpg`,
-        "uploadDate": video.uploadDate,
+        "uploadDate": video.date,
         "embedUrl": `https://www.youtube.com/embed/${video.youtubeId}`,
         "transcript": video.transcript
     };
@@ -64,7 +64,7 @@ export default async function VideoPage({ params }: VideoPageProps) {
                         <div className="flex flex-wrap items-center gap-4 mb-4 text-sm text-slate-500">
                             <div className="flex items-center gap-1">
                                 <Calendar size={14} />
-                                {new Date(video.uploadDate).toLocaleDateString()}
+                                {new Date(video.date).toLocaleDateString()}
                             </div>
                             {video.tags.map(tag => (
                                 <div key={tag} className="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded">
@@ -76,7 +76,7 @@ export default async function VideoPage({ params }: VideoPageProps) {
 
                         <h1 className="text-3xl font-bold text-slate-900 mb-4">{video.title}</h1>
                         <p className="text-lg text-slate-600 mb-8 leading-relaxed">
-                            {video.description}
+                            {video.desc}
                         </p>
 
                         {video.transcript && (

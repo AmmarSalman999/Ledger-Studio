@@ -4,7 +4,7 @@ import { mockProjects } from "@/lib/projects-data";
 import { Plus, Search, Filter, MoreVertical, Calendar, CheckSquare, Users } from "lucide-react";
 import Link from "next/link";
 import FadeIn from "@/components/animations/FadeIn";
-import StaggerContainer, { StaggerItem } from "@/components/animations/StaggerContainer";
+import { StaggerContainer, StaggerItem } from "@/components/animations/StaggerContainer";
 
 const statusColors: Record<string, string> = {
     'Active': 'bg-green-100 text-green-700',

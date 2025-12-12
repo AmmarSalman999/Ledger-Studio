@@ -33,7 +33,7 @@ export default function VideoCard({ video }: { video: VideoPost }) {
                 {video.title}
             </h3>
             <p className="text-sm text-slate-500 line-clamp-2">
-                {video.description}
+                {video.desc}
             </p>
         </Link>
     );

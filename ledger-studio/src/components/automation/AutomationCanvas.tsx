@@ -11,6 +11,7 @@ import ReactFlow, {
     Connection,
     Edge,
     Node,
+    ReactFlowInstance,
     BackgroundVariant
 } from 'reactflow';
 import 'reactflow/dist/style.css';
@@ -18,33 +19,23 @@ import 'reactflow/dist/style.css';
 import CustomNode from './CustomNode';
 import Sidebar from './Sidebar';
 
+// ... (previous imports)
+
 const nodeTypes = {
     custom: CustomNode,
 };
-
-const initialNodes: Node[] = [
-    {
-        id: '1',
-        type: 'custom',
-        position: { x: 250, y: 100 },
-        data: { label: 'New Inbound Lead', category: 'Trigger', icon: 'trigger', description: 'When a new lead is added to CRM' },
-    },
-];
-
-let id = 0;
-const getId = () => `dndnode_${id++}`;
-
-import { automationTemplates } from '@/lib/automation-templates';
-
-// ... (previous imports)
 
 interface AutomationCanvasProps {
     initialNodes?: Node[];
     initialEdges?: Edge[];
 }
 
-function AutomationCanvas({ initialNodes = defaultNodes, initialEdges = [] }: AutomationCanvasProps) {
+let id = 0;
+const getId = () => `dndnode_${id++}`;
+
+function AutomationCanvas({ initialNodes = [], initialEdges = [] }: AutomationCanvasProps) {
     const reactFlowWrapper = useRef<HTMLDivElement>(null);
+    const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
     // Use the passed props for initialization
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
@@ -69,7 +60,7 @@ function AutomationCanvas({ initialNodes = defaultNodes, initialEdges = [] }: Au
             const payload = event.dataTransfer.getData('application/payload');
 
             // check if the dropped element is valid
-            if (typeof type === 'undefined' || !type || !payload) {
+            if (typeof type === 'undefined' || !type || !payload || !reactFlowInstance) {
                 return;
             }
 

@@ -31,6 +31,8 @@ export const videoLibrary = [
     }
 ];
 
+export type VideoPost = typeof videoLibrary[0];
+
 export const servicesData = [
     {
         slug: "accounting-bookkeeping",
@@ -101,3 +103,43 @@ export const caseStudies = [
         content: "Managing cash across 5 locations was a nightmare. We built a centralized Power BI dashboard connected to their POS..."
     }
 ];
+
+export const blogPosts = [
+    {
+        slug: "future-of-accounting-automation-2025",
+        title: "The Future of Accounting Automation in 2025",
+        summary: "Why manual data entry is dying and what to do about it.",
+        date: "2024-12-01",
+        author: "Ledger Team",
+        category: "Automation",
+        readTime: "5 min read",
+        content: "The landscape of accounting is shifting beneath our feet. AI and machine learning are not just buzzwords..."
+    },
+    {
+        slug: "3-financial-kpis-for-saas",
+        title: "3 Financial KPIs Every SaaS Founder Must Track",
+        summary: "Beyond MRR: The metrics that actually predict failure or success.",
+        date: "2024-11-28",
+        author: "Ledger Team",
+        category: "Finance",
+        readTime: "7 min read",
+        content: "Most founders obsess over top-line revenue, but churn and CAC payback period are the real killers..."
+    },
+    {
+        slug: "case-study-logistics-efficiency",
+        title: "How We Improved Logistics Efficiency by 35%",
+        summary: "A deep dive into our work with a major logistics provider.",
+        date: "2024-11-15",
+        author: "Ledger Team",
+        category: "Case Study",
+        readTime: "4 min read",
+        content: "Logistics is a game of margins. Every minute and every mile counts..."
+    }
+];
+
+export const cmsData = {
+    videoLibrary,
+    services: servicesData,
+    caseStudies,
+    posts: blogPosts
+};

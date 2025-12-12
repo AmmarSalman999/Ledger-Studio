@@ -29,10 +29,10 @@ export default function FadeIn({
             y: 0,
             x: 0,
             transition: {
-                duration,
-                delay,
+                duration: duration,
+                delay: delay,
                 ease: "easeOut"
-            }
+            } as any
         }
     };
 
