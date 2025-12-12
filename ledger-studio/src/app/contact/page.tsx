@@ -70,10 +70,10 @@ export default function ContactPage() {
                     {/* Left Column (Brand/Info) */}
                     <div className="bg-slate-900 text-white p-12 md:w-2/5 flex flex-col justify-between">
                         <div>
-                            <span className="text-brand-blue font-bold tracking-widest uppercase text-xs mb-4 block">Application for</span>
-                            <h1 className="text-3xl font-bold mb-6">Financial Strategy Audit.</h1>
+                            <span className="text-brand-blue font-bold tracking-widest uppercase text-xs mb-4 block">Let's Build Your Financial System</span>
+                            <h1 className="text-3xl font-bold mb-6">Ready to streamline your accounting?</h1>
                             <p className="text-slate-400 leading-relaxed mb-8">
-                                We only work with a limited number of clients per quarter to maintain high service standards.
+                                Automate your workflows or scale your business with precision. We’re here to help.
                             </p>
                             <div className="space-y-4 text-sm text-slate-300">
                                 <div className="flex items-center gap-3">

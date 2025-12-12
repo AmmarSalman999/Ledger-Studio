@@ -26,7 +26,7 @@ export default function PublicNavbar() {
                         About
                     </Link>
                     <Link href="/videos" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
-                        Videos
+                        Library
                     </Link>
                     <Link href="/blog" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
                         Blog

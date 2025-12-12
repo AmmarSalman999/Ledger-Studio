@@ -1,161 +1,89 @@
 "use client";
 
-import { useCallback, useState } from 'react';
-import ReactFlow, {
-    Controls,
-    Background,
-    useNodesState,
-    useEdgesState,
-    addEdge,
-    Connection,
-    Edge,
-    MarkerType,
-    Node
-} from 'reactflow';
-import 'reactflow/dist/style.css';
-import { Save, Play, Plus, Trash } from 'lucide-react';
-import { supabase } from '@/lib/supabase';
+import { Plus, Zap, Activity, Clock, FileText } from "lucide-react";
+import Link from "next/link";
+import FadeIn from "@/components/animations/FadeIn";
+import { StaggerContainer, StaggerItem } from "@/components/animations/StaggerContainer";
 
-const initialNodes = [
-    {
-        id: '1',
-        type: 'input',
-        data: { label: 'Start: New Lead' },
-        position: { x: 250, y: 0 },
-        style: { background: '#fff', border: '1px solid #94a3b8', borderRadius: '8px', padding: '10px', fontWeight: 'bold', width: 200 }
-    },
-];
-
-export default function AutomationPage() {
-    const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-    const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-    const [saving, setSaving] = useState(false);
-    const [isRunning, setIsRunning] = useState(false);
-
-    const onConnect = useCallback(
-        (params: Edge | Connection) => setEdges((eds) => addEdge({ ...params, markerEnd: { type: MarkerType.ArrowClosed } }, eds)),
-        [setEdges],
-    );
-
-    const addNode = (type: string, label: string, color: string) => {
-        const id = Math.random().toString();
-        const newNode: Node = {
-            id,
-            position: { x: Math.random() * 400, y: Math.random() * 400 },
-            data: { label },
-            style: { background: color, color: '#fff', border: 'none', borderRadius: '8px', padding: '10px', width: 180, fontWeight: '500' }
-        };
-        setNodes((nds) => [...nds, newNode]);
-    };
-
-    const saveWorkflow = async () => {
-        setSaving(true);
-        // Save to Supabase 'automations' table
-        const flow = { nodes, edges };
-
-        try {
-            const { error } = await supabase.from('automations').insert([
-                {
-                    name: `Workflow - ${new Date().toLocaleTimeString()}`,
-                    flow_config: flow,
-                    is_active: true
-                }
-            ]);
-
-            if (error) {
-                alert('Error saving flow: ' + error.message);
-            } else {
-                alert('Workflow saved successfully!');
-            }
-        } catch (e) {
-            console.error(e);
-        } finally {
-            setSaving(false);
-        }
-    };
-
-    const runTest = () => {
-        setIsRunning(true);
-        setTimeout(() => {
-            alert("Test Run Complete: Lead processed through 3 steps.");
-            setIsRunning(false);
-        }, 1500);
-    }
-
+export default function AutomationDashboard() {
     return (
-        <div className="h-[calc(100vh-8rem)] flex flex-col">
-            {/* Toolbar */}
-            <div className="flex justify-between items-center mb-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+        <div className="p-8 max-w-7xl mx-auto">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-8">
                 <div>
-                    <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                        <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                        Automation Studio
-                    </h1>
+                    <h1 className="text-3xl font-bold text-slate-900">Automation Studio</h1>
+                    <p className="text-slate-500">Design, automate, and scale your financial operations.</p>
                 </div>
-
-                <div className="flex gap-3">
-                    <button
-                        onClick={runTest}
-                        disabled={isRunning}
-                        className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors border border-slate-200">
-                        {isRunning ? 'Running...' : <><Play size={16} /> Test Run</>}
-                    </button>
-                    <button
-                        onClick={saveWorkflow}
-                        disabled={saving}
-                        className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-white bg-brand-blue hover:bg-blue-600 rounded-lg transition-colors shadow-sm">
-                        {saving ? 'Saving...' : <><Save size={16} /> Save Flow</>}
-                    </button>
-                </div>
-            </div>
-
-            <div className="flex flex-1 gap-4 overflow-hidden">
-                {/* Canvas */}
-                <div className="flex-1 bg-slate-50 rounded-xl border border-slate-200 shadow-inner relative">
-                    <ReactFlow
-                        nodes={nodes}
-                        edges={edges}
-                        onNodesChange={onNodesChange}
-                        onEdgesChange={onEdgesChange}
-                        onConnect={onConnect}
-                        fitView
+                <div className="flex gap-4">
+                    <Link
+                        href="/dashboard/automation/templates"
+                        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white border border-slate-200 text-slate-700 font-medium hover:bg-slate-50 hover:border-slate-300 transition-all"
                     >
-                        <Background color="#cbd5e1" gap={20} />
-                        <Controls />
-                    </ReactFlow>
-                </div>
-
-                {/* Sidebar Toolbox */}
-                <div className="w-64 bg-white rounded-xl border border-slate-200 p-4 shadow-sm flex flex-col gap-3">
-                    <h3 className="font-bold text-xs uppercase tracking-wider text-slate-400 mb-2">Add Node</h3>
-
-                    <button onClick={() => addNode('default', 'Condition: Revenue > $10k', '#f59e0b')}
-                        className="p-3 bg-amber-50 border border-amber-200 text-amber-900 rounded-lg text-sm font-medium hover:shadow-md transition-all text-left flex items-center gap-2">
-                        <Plus size={14} /> Logic / Condition
-                    </button>
-
-                    <button onClick={() => addNode('default', 'Action: Send Email', '#3b82f6')}
-                        className="p-3 bg-blue-50 border border-blue-200 text-blue-900 rounded-lg text-sm font-medium hover:shadow-md transition-all text-left flex items-center gap-2">
-                        <Plus size={14} /> Action: Email
-                    </button>
-
-                    <button onClick={() => addNode('default', 'Action: Create Task', '#10b981')}
-                        className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-lg text-sm font-medium hover:shadow-md transition-all text-left flex items-center gap-2">
-                        <Plus size={14} /> Action: CRM Task
-                    </button>
-
-                    <button onClick={() => addNode('default', 'End Flow', '#ef4444')}
-                        className="p-3 bg-red-50 border border-red-200 text-red-900 rounded-lg text-sm font-medium hover:shadow-md transition-all text-left flex items-center gap-2">
-                        <Plus size={14} /> End
-                    </button>
-
-                    <div className="mt-auto pt-4 border-t border-slate-100">
-                        <p className="text-xs text-slate-400 text-center">
-                            Drag nodes to connect.<br />Double click edge to delete.
-                        </p>
-                    </div>
+                        <FileText size={18} />
+                        Templates
+                    </Link>
+                    <Link
+                        href="/dashboard/automation/create"
+                        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-brand-blue text-white font-bold hover:bg-blue-600 shadow-md hover:shadow-lg transition-all"
+                    >
+                        <Plus size={18} />
+                        New Workflow
+                    </Link>
                 </div>
             </div>
+
+            {/* Stats Overview */}
+            <StaggerContainer className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+                {[
+                    { label: "Active Workflows", value: "8", icon: Zap, color: "text-brand-blue" },
+                    { label: "Total Executions", value: "1,240", icon: Activity, color: "text-purple-600" },
+                    { label: "Success Rate", value: "99.8%", icon: Activity, color: "text-brand-green" },
+                    { label: "Saved Hours", value: "420h", icon: Clock, color: "text-orange-500" },
+                ].map((stat, i) => (
+                    <StaggerItem key={i} className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                        <div className="flex items-center gap-4 mb-2">
+                            <div className={`p-2 rounded-lg bg-slate-50 ${stat.color}`}>
+                                <stat.icon size={20} />
+                            </div>
+                            <span className="text-sm font-medium text-slate-500">{stat.label}</span>
+                        </div>
+                        <div className="text-3xl font-bold text-slate-900">{stat.value}</div>
+                    </StaggerItem>
+                ))}
+            </StaggerContainer>
+
+            {/* Recent Workflows */}
+            <FadeIn delay={0.2} className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                <div className="p-6 border-b border-slate-100 flex items-center justify-between">
+                    <h3 className="font-bold text-slate-900">Recent Workflows</h3>
+                    <Link href="/dashboard/automation/logs" className="text-sm text-brand-blue hover:underline">
+                        View All Activity
+                    </Link>
+                </div>
+                <div className="divide-y divide-slate-100">
+                    {[
+                        { name: "Inbound Lead -> CRM Sync", status: "Active", lastRun: "2 mins ago", runs: 450 },
+                        { name: "Invoice Extraction (Gmail)", status: "Active", lastRun: "1 hour ago", runs: 12 },
+                        { name: "Weekly Report Generation", status: "Paused", lastRun: "3 days ago", runs: 4 },
+                    ].map((workflow, i) => (
+                        <div key={i} className="p-4 hover:bg-slate-50 transition-colors flex items-center justify-between group">
+                            <div className="flex items-center gap-4">
+                                <div className={`w-2 h-2 rounded-full ${workflow.status === "Active" ? "bg-brand-green" : "bg-slate-300"}`} />
+                                <div>
+                                    <div className="font-bold text-slate-900">{workflow.name}</div>
+                                    <div className="text-xs text-slate-500">Last run: {workflow.lastRun} • {workflow.runs} runs</div>
+                                </div>
+                            </div>
+                            <Link
+                                href="/dashboard/automation/create"
+                                className="opacity-0 group-hover:opacity-100 px-3 py-1 text-xs font-bold border border-slate-200 rounded-md hover:bg-white transition-all transform translate-x-2 group-hover:translate-x-0"
+                            >
+                                Edit
+                            </Link>
+                        </div>
+                    ))}
+                </div>
+            </FadeIn>
         </div>
     );
 }
